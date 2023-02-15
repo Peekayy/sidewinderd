@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <tinyxml2.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include <linux/hidraw.h>
 #include <linux/input.h>
@@ -72,7 +73,9 @@ void Keyboard::playMacro(std::string macroPath, VirtualInput *virtInput) {
 				delay = delay - (request.tv_sec * 1000);
 				request.tv_nsec = 1000000L * delay;
 				nanosleep(&request, &remain);
-			}
+            } else if (child->Name() == std::string("CommandEvent")) {
+                system(child->GetText());
+            }
 		}
 	}
 }
